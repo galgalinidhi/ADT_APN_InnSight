@@ -1,1 +1,0 @@
-# The contents of this folder belongs to the server run-time env
