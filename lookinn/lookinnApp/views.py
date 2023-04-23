@@ -32,10 +32,50 @@ def getListings(request):
                 
     return JsonResponse(json_data, safe=False)
 
+# @api_view(['GET'])
+# def getCities(request):
+#     cities = list(Location.objects.order_by().values('city').distinct())
+#     return JsonResponse(cities, safe=False)
+
+# Nidhi Galgali
+# Get listings of cities.
 @api_view(['GET'])
-def getCities(request):
-    cities = list(Location.objects.order_by().values('city').distinct())
-    return JsonResponse(cities, safe=False)
+def list_cities(request):
+   cities = Location.objects.values_list('city', flat=True).distinct()
+   cities = [city for city in cities]
+   return JsonResponse({'cities': cities})
+
+
+# Nidhi Galgali
+# Get listings in  a particular cities.
+@api_view(['GET'])
+def city_listings(request, city):
+   listings = Listings.objects.filter(location__city=city)
+   data = [{'id': listing.id, 'name': listing.name} for listing in listings]
+   return JsonResponse({'listings': data})
+
+# Nidhi Galgali
+# Get property details.
+@api_view(['GET'])
+def listing_details(request, listing_id):
+    try:
+        property_details = Property_Details.objects.get(listing_id=listing_id)
+        amenities = Amenities.objects.filter(listing_id=listing_id).first()
+        ratings = Reviews.objects.filter(listing_id=listing_id).first()
+        locations = Location.objects.filter(listing_id=listing_id).first()
+    except Property_Details.DoesNotExist:
+        return JsonResponse({'error': 'listing ID does not exist'}, status=404)
+
+    data = {
+        'neighbourhood': locations.neighbourhood.strip("'"),
+        'price': property_details.price,
+        'bedrooms': property_details.bedrooms,
+        'accomodate_count': property_details.accomodate_count,
+        'amenities': amenities.amenities.strip("'") if amenities else None,
+        'rating': ratings.score_value
+    }
+
+    return JsonResponse(data, status=200)
 
 
 @api_view(['POST'])
