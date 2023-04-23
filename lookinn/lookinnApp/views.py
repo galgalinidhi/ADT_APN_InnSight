@@ -39,7 +39,7 @@ def getCities(request):
 
 
 @api_view(['POST'])
-def updateListings(request):
+def addListings(request):
     json_data = json.loads(request.body.decode('utf-8'))
     id = json_data['listingId']
  
@@ -107,3 +107,72 @@ def delete_property(request, listing_id):
     location.delete()
     amenities.delete()
     return JsonResponse({'message': 'Property deleted successfully'}, status=204)
+
+
+
+@api_view(['PUT'])
+@csrf_exempt
+def update_listing(request, listing_id):
+    try:
+        listing = Listings.objects.get(id=listing_id)
+    except Listings.DoesNotExist:
+        return JsonResponse({'error': 'Listing not found'}, status=404)
+
+    if request.method == 'PUT':
+        json_data = request.data
+
+        if 'name' in json_data.keys():
+            listing.name = json_data['name']
+
+        try:
+            location = Location.objects.get(listing_id=listing_id)
+            if 'longitude' in json_data.keys():
+                location.longitude = json_data['longitude']
+            if 'latitude' in json_data.keys():
+                location.latitude = json_data['latitude']
+            if 'city' in json_data.keys():
+                location.city = json_data['city']
+            if 'neighbourhood' in json_data.keys():
+                location.neighbourhood = json_data['neighbourhood']
+            location.save()
+        except Location.DoesNotExist:
+            pass
+
+        try:
+            review = Reviews.objects.get(listing_id=listing_id)
+            if 'score_rating' in json_data.keys():
+                review.score_rating = json_data['score_rating']
+            if 'score_value' in json_data.keys():
+                review.score_value = json_data['score_value']
+            review.save()
+        except Reviews.DoesNotExist:
+            pass
+
+        try:
+            details = Property_Details.objects.get(listing_id=listing_id)
+            if 'property_type' in json_data.keys():
+                details.property_type = json_data['property_type']
+            if 'room_type' in json_data.keys():
+                details.room_type = json_data['room_type']
+            if 'accomodate_count' in json_data.keys():
+                details.accomodate_count = json_data['accomodate_count']
+            if 'bedrooms' in json_data.keys():
+                details.bedrooms = json_data['bedrooms']
+            if 'price' in json_data.keys():
+                details.price = json_data['price']
+            if 'instant_bookable' in json_data.keys():
+                details.instant_bookable = json_data['instant_bookable']
+            details.save()
+        except Property_Details.DoesNotExist:
+            pass
+
+        try:
+            amenities = Amenities.objects.get(listing_id=listing_id)
+            if 'amenities' in json_data.keys():
+                amenities.amenities = json_data['amenities']
+            amenities.save()
+        except Amenities.DoesNotExist:
+            pass
+
+        listing.save()
+        return JsonResponse({'message': 'Listing updated successfully'}, status=200)
