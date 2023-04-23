@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+7^07)qewdz*opy_suxu0o87%v)nzz#%go2s3n9f3m8k&5z%(*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '*']
 
 DJANGO_SETTINGS_MODULE = 'lookinn.settings'
 
@@ -87,11 +87,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'final_adt',
+        'NAME': 'Airbnb',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'Root1234',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3306',
     }
 }
 

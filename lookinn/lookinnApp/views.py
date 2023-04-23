@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Listings, Location, Reviews, Property_Details, Amenities
 from rest_framework.decorators import api_view
 import json 
@@ -88,3 +89,21 @@ def updateListings(request):
     amenities.save()
 
     return JsonResponse({"meassage": "OK"})
+
+#@csrf_exempt
+@api_view(['DELETE'])
+def delete_property(request, listing_id):
+    try:
+        property_details = Property_Details.objects.get(listing_id=listing_id)
+        reviews=Reviews.objects.get(listing_id=listing_id)
+        location=Location.objects.get(listing_id=listing_id)
+        amenities=Amenities.objects.get(listing_id=listing_id)
+        
+    except Property_Details.DoesNotExist:
+        return JsonResponse({'error': 'Property not found'}, status=404)
+    
+    property_details.delete()
+    reviews.delete()
+    location.delete()
+    amenities.delete()
+    return JsonResponse({'message': 'Property deleted successfully'}, status=204)
