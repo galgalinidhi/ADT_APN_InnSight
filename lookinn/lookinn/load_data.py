@@ -18,12 +18,12 @@ def run():
         count = 0
 
         for row in reader:
-            
+            print(row)
             count = count + 1
-            if count < 105000:
+            if count < 5000:
                 continue
 
-            if count > 110000:
+            if count > 7000:
                 break
 
             print(row)

@@ -24,9 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+7^07)qewdz*opy_suxu0o87%v)nzz#%go2s3n9f3m8k&5z%(*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+
+DJANGO_SETTINGS_MODULE = 'lookinn.settings'
 
 
 # Application definition
