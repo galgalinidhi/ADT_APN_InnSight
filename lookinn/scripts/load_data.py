@@ -20,10 +20,10 @@ def run():
         for row in reader:
             
             count = count + 1
-            if count < 105000:
-                continue
+            # if count < 105000:
+            #     continue
 
-            if count > 110000:
+            if count > 463:
                 break
 
             print(row)

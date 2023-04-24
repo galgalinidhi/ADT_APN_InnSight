@@ -43,7 +43,7 @@ def getListings(request):
 def list_cities(request):
    cities = Location.objects.values_list('city', flat=True).distinct()
    cities = [city for city in cities]
-   return JsonResponse({'cities': cities})
+   return JsonResponse(cities, safe=False)
 
 
 # Nidhi Galgali
