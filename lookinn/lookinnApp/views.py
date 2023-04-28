@@ -51,7 +51,7 @@ def list_cities(request):
 @api_view(['GET'])
 def city_listings(request, city):
    listings = Listings.objects.filter(location__city=city)
-   data = [{'id': listing.id, 'name': listing.name} for listing in listings]
+   data = [{'id': listing.id, 'name': listing.name.strip('"')} for listing in listings]
    return JsonResponse({'listings': data})
 
 # Nidhi Galgali
